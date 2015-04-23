@@ -1,0 +1,11 @@
+Q:
+How to get 2+ USB joysticks working in BeOS?
+
+A:
+For every usb joystick attached, you get a device added, eg, if you have two usb joysticks... 
+/boot/home/config/settings/joysticks/usb/0 and /boot/home/config/settings/joysticks/usb/1. 
+If you return to the joysticks prefs, or want to use a particular one, BeOS gets confused. 
+
+To correct this, open the device entry and edit it. Change the line that reads gadget 
+= "Generic USB Joystick" to gadget = "Generic USB Joystick0" where 0 is the device number, 
+or change it to something else unique.

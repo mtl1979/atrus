@@ -1,0 +1,10 @@
+Q:
+How do I fix the too much memory problem?
+
+A:
+1. Copy /boot/home/config/settings/kernel/drivers/sample/kernel to
+  /boot/home/config/settings/kernel/drivers/kernel
+
+2. Edit the new file and uncomment the disk_cache_size line by removing the # sign.
+
+3. Change the 2048 to 16384 if you have more than 128MB of RAM.

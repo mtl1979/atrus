@@ -1,0 +1,9 @@
+Q: 
+How do I search for a specific text/string in a number of files (spread over various subdirs)?
+
+A:
+-Open a Terminal and type: grep <string> $(find <basedir> -name "<file-pattern>")
+-replace <string> <basedir> and <file-pattern>
+-you can omit -name "<file-pattern>"  if you want to search all files
+-you can use: grep <string> <file1 or file-pattern1> <file2 or file-pattern2> <file3 ....
+to search in the current dir (eg. no subdirs)

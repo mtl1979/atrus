@@ -1,0 +1,40 @@
+My commands are as follows:
+
+Public & Private Commands:
+	gimme [FAQ page]		-   Gives requested FAQ page
+	index					-   Gives FAQ index
+
+	banned				-   Show banned persons and how long ban they have
+	beos					-   What about BeOS?
+	bash					-   Where to find help with the BASH shell (you know, the command line or Terminal).
+	bebook				-   Display a link to the R5 BeBook.
+	beosradio				-   BeOS Radio!  The 24 hour BeOS internet radio station http://www.beosradio.com [BeOSRadio]
+	browser				-   Provides a link to some useful BeOS sites.
+	buynow				-   Provides a link to where you can buy BeOS Products
+	catsup				-   Spit out the last page of chat so you can catch up on the conversation.
+	clients				-   Tells where to get BeShare clients
+	c++					-   Same as Programming Command
+	coffee				-   In Case you Need a little "pick me up"...
+	email [nick]				-   Tells email address for [nick]
+	fetch					-   Provides a link to Google
+	forums				-   BeOS discussion forums.
+	gmtime				-   Displays Greewitch Mean Time.
+	itime					-   Displays Net Time.
+	message for [nick] [message]	-   Leaves a message for [nick] which is delivered when [nick] checks messages.
+	messages				-   Retrieves any messages you may have.
+	news					-   Tells you where you can get the latest BeOS news.
+	programming			-   Helpful information about programming for for BeOS.
+	rules					-   Display the servers main rules.
+	seen [nick]				-   Will make me tell you the last time I saw [nick].
+	time					-   Displays my local time.
+
+Private Commands (use /msg):
+	help					-   Prints this help file.
+	owner				-   Who is responsible for this mess.
+	public					-   Makes me respond publically.
+	private				-   Responses will be private.
+	version				-   What version I am up to.
+
+Notes:
+Nicks with spaces must be surrounded by single quotes (ie. 'space nic').
+Messaging functions are not 'secure' in any sense of the word.

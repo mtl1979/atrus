@@ -1,0 +1,18 @@
+Q:
+How to patch BeOS R5 to run on Athlon systems?
+
+A:
+This should work:
+
+1. Boot BeOS with patched bootdisk (available from BeShare)
+
+2. Edit /boot/beos/system/kernel_intel.patch and replace "memcpy_pIII" with "memcpy_default"
+   and "memset_pIII" with "memset_default"
+
+3. Edit /boot/beos/system/lib/libroot.so.patch and replace "memcpy_pIII" with "memcpy_default"
+    and "memset_pIII" with "memset_default"
+
+And remember to backup those two files BEFORE you edit them. Now you should be ready to go.
+
+There is also more information available in this address:
+		- http://wiki.bebits.com/page/InstallingOnAthlonXPorMP

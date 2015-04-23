@@ -1,0 +1,23 @@
+This is an opensource infobot style creation started by Alan "void" Ellis (alan@cgsoftware.com), based on BeShare::Bot.
+
+Please feel free to extend it, if you would like your extensions added to the 'official'
+source, plese submit your changes to me, and try to keep the same coding style, becuase
+I will change it when I put it in.
+
+Additional contributors with thier contributions are listed here:
+
+Names are BeShare nicks.
+
+Jeremy: For the skeleton C code that makes this thing possible, and for
+        the fantastic MUSCLE library.
+        
+BGA: Something soon, right?
+
+neiras and ctate: helping to port it to Linux.
+
+Ben: Hosting this on the BeShare server.
+
+BeGirl for the BeFAQs server (the home of Bubbles)
+
+Zaranthos: Additions and upgrades that make up Bubbles
+

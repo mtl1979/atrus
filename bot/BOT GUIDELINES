@@ -1,0 +1,41 @@
+GUIDELINES FOR CREATING A NON-ANNOYING BeSHARE BOT (v1.3) 
+Jeremy (jaf@lcsaudio.com)  11/16/2000 
+--------------------------------------------------------- 
+ 
+1.  Your bot should not post any public chat messages, 
+    except when it has been spoken to publically, by name, 
+    by a human.  (that is, when a human has posted a public chat text 
+    that starts with your bot's name, e.g. "TimeBot what time is it?"). 
+    At that time, your bot may repond with a short line of public text. 
+ 
+2.  Your bot should identify itself as a BeShare bot by placing 
+    a boolean field named "bot" into its beshare/name MUSCLE node, 
+    with a value of true.   (If you are using void's BeShare::Bot (Bot.cpp) class, 
+    don't worry, as this is done for you by that code).  This allows 
+    other users and bots to identify you as a bot, and act accordingly. 
+ 
+3.  Any messages that your bot receives from other bots should not 
+    be responded to.  This will ensure that bots do not get into 
+    infinite reply->reply->reply->reply->.... cycles.  (Again, if you 
+    are using void's code, this logic will be handled for you). 
+ 
+3.  When someone /msg's your bot, please reply with a private 
+    message, not a public one. 
+ 
+4.  Please implement a feature in your bot so that when someone 
+    says "<BotName> owner", your bot responds with your username 
+    and email address.  This will allow people to contact you 
+    if your Bot is getting out of hand.  E.g. 
+ 
+       Jeremy:  TimeBot owner 
+       TimeBot: My owner is Jeremy, a.k.a mailto:jaf@lcsaudio.com 
+ 
+These guidelines are posted in order to keep BeShare chat 
+enjoyable for everyone.  Please abide by them when creating 
+and deploying your bot.  If bots are abused on BeShare, Ben 
+and I will have to look into banning IP addresses, and I 
+really don't want to have to do that. 
+ 
+Thanks, 
+Jeremy 
+ 

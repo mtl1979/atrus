@@ -1,0 +1,7 @@
+Q:
+How can I manually continue BeShare download?
+
+A:
+BeShare should autoresume download which was going on when it was closed. Sometimes this
+does not happen. In that case you can search BeShare for filechopper. Filechopper removes 
+last bytes of download and may help BeShare to resume download again.

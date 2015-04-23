@@ -1,0 +1,14 @@
+		BeShare :
+			- Available at http://www.bebits.com/app/1330
+			
+		JavaShare :
+			- Basic BeShare client with no file sharing capabilities (yet). Should run on any java enabled OS.
+			  Available at http://www.bebits.com/app/2795
+
+		Ozone :
+			- Basic BeShare client with file sharing capabilities. Runs on Windows, Linux and Mac.
+			  Available at http://www.magep.com/ozone/index.php?page=download
+
+		Unizone :
+			- Excellent BeShare client. Supports unicode and nearly all BeShare features. Runs on Windows.
+			  Available at http://www.raasu.org/tools/windows

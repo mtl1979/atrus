@@ -1,0 +1,15 @@
+Q:
+Why BeOS boots up with grayscale picture?
+
+A:
+Your display adapter is probably not supported by BeOS and it uses fail-safe driver. 
+If your display adapter supports VESA 2.0 you can try this:
+Go to /boot/home/config/setting/kernel/drivers/sample. There is a file named vesa. 
+Open it and add one of the following two rows (not both of them):
+mode 800 600 16
+mode 1024 768 16
+Save file. Copy vesa file to /boot/home/config/settings/kernel/drivers and boot BeOS. 
+If you are lucky you get colors using VESA modes.
+
+There is also a program Vesa Accepted, which can make same modification. It can be 
+found from BeBits. 

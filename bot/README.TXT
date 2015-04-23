@@ -11,7 +11,7 @@ you to play with if you like building bots.
 
 
 Make sure that you read the Bot Guidelines document as well, it
-contains importatnt information.
+contains important information.
 
 -Alan, aka void (alan@cgsoftware.com)
 
@@ -20,14 +20,14 @@ HOW TO BUILD
 
 - Download MUSCLE (6.20 or higher) and unpack it so that the 'muscle'
   directory is in the directory above this one.
-- type 'make' to build the sharebot.
+- type 'make' to build the Atrus.
 
 
 HOW TO MODIFY
 -------------
 
 This is some skeleton code for making your own groovy BeShare bot.
-Look in sharebot.cpp for functions that you can add to... they
+Look in VoidBot.cpp for functions that you can add to... they
 include:
 
 ReceivedChatMessage()       (called when someone sends some chat text)
@@ -43,7 +43,7 @@ SendPrivateMessage()        (send a /msg to a particular user or users)
 This code is public domain, do what you like with it (but please 
 be considerate and don't run bots that are annoying the other BeShare 
 users!  If you want to test your 'bot, it's better to do it on
-your own MUSCLE server (i.e. have your bot connect to 'localhost' then
+your own MUSCLE server (i.e. have your bot connect to 'localhost' than
 to do it on e.g. beshare.bentonrea.com.  Thanks!)
 
 

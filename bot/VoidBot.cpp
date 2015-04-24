@@ -198,13 +198,13 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 				cool += ch;
 			}
 
-    		fclose(fp);
-    		if(cool != "\n")
-   			{
+			fclose(fp);
+			if(cool != "\n")
+			{
 				cool = cool.Substring(0,(cool.Length()-1));
-    			SendPrivateMessage(SessionID,cool.Cstr());
-    		}
-   		}
+				SendPrivateMessage(SessionID,cool.Cstr());
+			}
+		}
 		return true;
 	}
 	//*****************</FORTUNE ADDED BY MISZA>************************//
@@ -615,23 +615,23 @@ String VoidBot::NetTime()
 //-------------------------------------------------------------------------------
 time_t VoidBot::SecondsSinceJan1970()
 {
-	tm itstart;							// set up the base time of
+	tm itstart;								// set up the base time of
 
-		itstart.tm_year=70;				// january 1, 1970, 00:00:00
-		itstart.tm_mday=1;
-		itstart.tm_mon=0;
-		itstart.tm_hour=0;
-		itstart.tm_min=0;
-		itstart.tm_sec=0;
-		itstart.tm_wday=4;				// Happens to be a thursday
-		itstart.tm_yday=0;
-		itstart.tm_isdst=0;
+	itstart.tm_year=70;						// january 1, 1970, 00:00:00
+	itstart.tm_mday=1;
+	itstart.tm_mon=0;
+	itstart.tm_hour=0;
+	itstart.tm_min=0;
+	itstart.tm_sec=0;
+	itstart.tm_wday=4;						// Happens to be a thursday
+	itstart.tm_yday=0;
+	itstart.tm_isdst=0;
 
-	time_t its = mktime(&itstart);		// convert this to time_t form
-	time_t now = time(NULL);			// get current time, in time_t
+	time_t its = mktime(&itstart);			// convert this to time_t form
+	time_t now = time(NULL);				// get current time, in time_t
 	time_t gwtime = mktime(gmtime(&now));
 
-	return (time_t)difftime(gwtime, its);	// get difference twxt gmtime and its
+	return (time_t)difftime(gwtime, its);	// get difference between gmtime and its
 }
 //-------------------------------------------------------------------------------
 bool VoidBot::IsBotCommand(const String& Command)

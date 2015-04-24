@@ -16,7 +16,7 @@ BotData::BotData(const char* Name)
 void BotData::Name(const char *TheName)
 {
 	fName = TheName;
-	
+
 	if( fMessageGateway() )
 	{
 		// Set my name for other BeShare users to see
@@ -36,7 +36,7 @@ BotData::Name() const
 	return fName.Cstr();
 }
 // ---------------------------------------------------------
-void 
+void
 BotData::SessionID(const char *TheSessionID)
 {
 	fSessionID = TheSessionID;

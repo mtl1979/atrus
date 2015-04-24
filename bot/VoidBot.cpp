@@ -2,6 +2,8 @@
 
 #ifdef __BEOS__
 #include <be/kernel/OS.h>
+#elif WIN32
+#define popen _popen
 #endif
 
 #include "User.h"
@@ -11,7 +13,7 @@
 const uint32 kChatHistoryDepth = 1000;
 const uint32 kDefaultChatHistory = 25;
 
-#define BOTPATH "/boot/apps/BOT-Atrus/bin"
+static char botPath[MAX_PATH];
 
 //-------------------------------------------------------------------------------
 VoidBot::VoidBot()
@@ -19,7 +21,7 @@ VoidBot::VoidBot()
          fHandled(false),
          fSendPublic(false),
          fPrivateCommand(false)
-{ 
+{
 }
 //-------------------------------------------------------------------------------
 void VoidBot::ReceivedChatMessage(const char *SessionID, const char *Message)
@@ -36,19 +38,19 @@ void VoidBot::ReceivedChatMessage(const char *SessionID, const char *Message)
 			lastwords += " [";
 			lastwords += NetTime();
 			lastwords += "]";
-	
+
 			fLastWords[usr->Name()] = lastwords;
 		}
-		
+
 		String command(Message);
-		
-		if( IsBotCommand(command) ) 
+
+		if( IsBotCommand(command) )
 		{
 			Command(SessionID, command);
 		}
-		
+
 		ReportMessageExistence(SessionID, fData.UserByID(SessionID)->Name());
-		
+
 
 		if( false == fPrivateCommand )
 		{
@@ -61,7 +63,7 @@ void VoidBot::ReceivedChatMessage(const char *SessionID, const char *Message)
 			chat += usr->Name();
 			chat += ": ";
 			chat += command;
-				
+
 			fChatHistory.push_front(chat);
 			if( fChatHistory.size() > kChatHistoryDepth )
 			{
@@ -78,7 +80,7 @@ void VoidBot::ReceivedPrivateMessage(const char* SessionID, const char* Message)
 	fPrivateCommand = true;
 	ReceivedChatMessage(SessionID, Message);
 	fPrivateCommand = false;
-	
+
 	if( false == fHandled )
 	{
 		Bot::ReceivedPrivateMessage(SessionID, Message);
@@ -114,7 +116,7 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 			SendMessage(SessionID, "There is _no way_ I can remember all that, please phrase the message shorter.");
 			return true;
 		}
-		
+
 		pos += keyword.Length();
 		String name(GetNick(Command, pos));
 		if( 0 == name.Length() )
@@ -122,21 +124,21 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 			SendMessage(SessionID, "Please specify a nick!");
 			return true;
 		}
-		
+
 		if( B_ERROR != name.IndexOf(' ') )
 		{
 			// name with space, adjust for delimiter chars.
 			pos += 2;
 		}
-		
+
 		pos += name.Length() + 1;
-		
+
 		if( (int32)Command.Length() < (pos - 1) )
 		{
 			SendMessage(SessionID, "Please specify a message.");
 			return true;
 		}
-		
+
 		String message("Message from ");
 		message += fData.UserByID(SessionID)->Name();
 		message += " Left at";
@@ -150,21 +152,21 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 		fReportedNewMessages[name] = false;
 		return true;
 	}
-	
+
 	// "Seen" command
 	keyword = "seen";
 	pos = WholeWordPos(Command, keyword.Cstr());
 	if( -1 != pos )
 	{
 		pos += keyword.Length();
-		
+
 		String name(GetNick(Command, pos));
 		if( 0 == name.Length() )
 		{
 			SendMessage(SessionID, "Please specify a nick!");
 			return true;
 		}
-		
+
 		if( fLastWords.find(name.Cstr()) != fLastWords.end() )
 		{
 			String info(name);
@@ -180,34 +182,33 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 		}
 		return true;
 	}
-	
+
 		//*****************<FORTUNE ADDED BY MISZA>************************//
 	pos = WholeWordPos(Command, "fortune");
 	if(-1 != pos)
 	{
-	FILE *fp = popen ("fortune", "r");
-	if(fp != NULL)
-	{
-		char ch;
-		String cool= "\n";
-	
-		while((ch = fgetc(fp))!= EOF)
+		FILE *fp = popen ("fortune", "r");
+		if(fp != NULL)
 		{
-			cool += ch;
+			char ch;
+			String cool= "\n";
+
+			while((ch = fgetc(fp))!= EOF)
+			{
+				cool += ch;
+			}
+
+			fclose(fp);
+			if(cool != "\n")
+			{
+				cool = cool.Substring(0,(cool.Length()-1));
+				SendPrivateMessage(SessionID,cool.Cstr());
+			}
 		}
-	
-    	fclose(fp);
-    	if(cool != "\n")
-   		{	cool = cool.Substring(0,(cool.Length()-1));
-    		SendPrivateMessage(SessionID,cool.Cstr());
-    	}
-   	}
-   	else
-    	fclose(fp);
-	return true;
+		return true;
 	}
 	//*****************</FORTUNE ADDED BY MISZA>************************//
-	
+
 	// "GMTime" command
 	pos = WholeWordPos(Command, "gmtime");
 	if( -1 != pos )
@@ -237,14 +238,14 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 		SendMessage(SessionID, info.Cstr());
 		return true;
 	}
-	
+
 	// "Atrus" Prevent messages to bebop
 	keyword = "message for bebop";
 	pos = WholeWordPos(Command, keyword.Cstr());
 	if( B_ERROR != pos )
 	{
 		SendPrivateMessage(SessionID, "You didn't say the magic word...");
-		                              
+
 			return true;
 	}
 
@@ -254,7 +255,7 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 	if( B_ERROR != pos )
 	{
 		SendPrivateMessage(SessionID, "You didn't say the magic word...");
-		                              
+
 			return true;
 	}
 
@@ -264,7 +265,7 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 	if( B_ERROR != pos )
 	{
 		SendPrivateMessage(SessionID, "You didn't say the magic word...");
-		                              
+
 			return true;
 	}
 
@@ -274,7 +275,7 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 	if( B_ERROR != pos )
 	{
 		SendPrivateMessage(SessionID, "You didn't say the magic word...");
-		                              
+
 			return true;
 	}
 
@@ -285,38 +286,38 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 		bool messages = false;
 		uint32 quantity = 0;
 		const char* name = fData.UserByID(SessionID)->Name();
-		
+
 		if( fMessagesForName.find(name) != fMessagesForName.end() )
 		{
 			quantity = fMessagesForName[name].size();
-			
+
 			if( quantity != 0 )
 			{
 				messages = true;
 			}
 		}
-		
+
 		if( true == messages )
-		{	
+		{
 			for( uint32 i = 0; i < quantity; i++ )
 			{
 				SendPrivateMessage(SessionID, fMessagesForName[name][i].Cstr());
 			}
-			
+
 			fMessagesForName[name].clear();
 			fReportedNewMessages[name] = true;
 		}
 		else
-		{	
+		{
 			String reply("Sorry ");
 			reply += fData.UserByID(SessionID)->Name();
 			reply += ", You get nothing and like it!";
 			SendPrivateMessage(SessionID, reply.Cstr());
 		}
-				
+
 		return true;
 	}
-	
+
 	// "Version" command
 	pos = WholeWordPos(Command, "version");
 	if( B_ERROR != pos )
@@ -325,14 +326,14 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 		SendPrivateMessage(SessionID, "I am at version 2.1 (MUSCLE " MUSCLE_VERSION_STRING ")");
 		return true;
 	}
-	
+
 	pos = WholeWordPos(Command, "catsup");
 	if( B_ERROR != pos )
 	{
 		// Figure out how many lines of chat to return
 		pos++;
 		pos += strlen("catsup");
-		
+
 		uint32 lines;
 		if( (uint32)pos < Command.Length() )
 		{
@@ -346,7 +347,7 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 		{
 			lines = 25;
 		}
-		
+
 		if( lines > fChatHistory.size() )
 		{
 			lines = fChatHistory.size();
@@ -369,16 +370,16 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 	if( -1 != pos )
 	{
 		pos += keyword.Length();
-		
+
 		String name(GetNick(Command, pos));
 		if( 0 == name.Length() )
 		{
 			SendPrivateMessage(SessionID, "Please specify a nick!");
 			return true;
 		}
-		
+
 		{
-			String fullname=BOTPATH;			
+			String fullname(botPath);
 			fullname += "/email/";
 			fullname += name;
 			if(!SendTextfile(SessionID, fullname.Cstr(), false))
@@ -395,16 +396,16 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 	if( -1 != pos )
 	{
 		pos += keyword.Length();
-		
+
 		String name(GetNick(Command, pos));
 		if( 0 == name.Length() )
 		{
 			SendPrivateMessage(SessionID, "Please specify help page!");
 			return true;
 		}
-		
+
 		{
-			String fullname=BOTPATH;			
+			String fullname(botPath);
 			fullname += "/faq/";
 			fullname += name;
 			return SendTextfile(SessionID, fullname.Cstr(), false);
@@ -415,7 +416,7 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 	String name(Command.Substring( Command.IndexOf(" ") + 1));
 	if ( 0 < name.Length() )
 	{
-		String fullname=BOTPATH;			
+		String fullname(botPath);
 		fullname += "/commands/";
 		fullname += name.Cstr();
 		return SendTextfile(SessionID, fullname.Cstr(), false);
@@ -435,8 +436,8 @@ bool VoidBot::PrivateCommands(const char* SessionID, const String& Command)
 			SendPrivateMessage(SessionID, "I am now in public mode, I hope you are happy.");
 			fSendPublic = true;
 			return true;
-		}		
-	
+		}
+
 		// "Private" command
 		pos = WholeWordPos(Command, "private");
 		if( -1 != pos )
@@ -444,12 +445,12 @@ bool VoidBot::PrivateCommands(const char* SessionID, const String& Command)
 			SendPrivateMessage(SessionID, "I am now in private mode, much better.");
 			fSendPublic = false;
 			return true;
-		}		
-	
+		}
+
 		// more stuff
 	}
 
-	
+
 	return false;
 }
 //-------------------------------------------------------------------------------
@@ -493,16 +494,15 @@ bool VoidBot::SendTextfile(const char* SessionID, const char* Message, bool motd
 				SendMessage(SessionID, cool.Cstr());
 			}
 		}
-			
+
 		fclose(fp);
 		return true;
 	}
 	else
 	{
 		// No file found
-		fclose(fp);
 		return false;
-	}	
+	}
 }
 //-------------------------------------------------------------------------------
 void VoidBot::SendMessage(const char* SessionID, const char* Message)
@@ -513,11 +513,11 @@ void VoidBot::SendMessage(const char* SessionID, const char* Message)
 	}
 	else
 	{
-		SendPrivateMessage(SessionID, Message); 
+		SendPrivateMessage(SessionID, Message);
 	}
 }
 //-------------------------------------------------------------------------------
-void 
+void
 VoidBot::UserLoggedInOrChangedName(const char *SessionID, const char *Name)
 {
 	// Keep list of UserIDs. If UserID is not found then it is new user
@@ -527,7 +527,7 @@ VoidBot::UserLoggedInOrChangedName(const char *SessionID, const char *Name)
 		if( atol(SessionID) > atol(fData.SessionID()) )
 		{
 			// Send special message for one user only. Not private, since it beeps
-			String fullname=BOTPATH;			
+			String fullname(botPath);
 			fullname += "/motd/";
 			fullname += "motd";
 			SendTextfile(SessionID, fullname.Cstr(), true);
@@ -537,7 +537,7 @@ VoidBot::UserLoggedInOrChangedName(const char *SessionID, const char *Name)
 	}
 
 	if( fLastWords.find(Name) == fLastWords.end() )
-	{	
+	{
 		String log("logging in on ");
 		log += Time();
 		log += " [";
@@ -560,7 +560,7 @@ VoidBot::UserLoggedInOrChangedName(const char *SessionID, const char *Name)
 		log += NetTime();
 		log += "]";
 		fLastWords[prevname] = log;
-		
+
 		// set log for new nick
 		log = "changing from ";
 		log += prevname;
@@ -568,12 +568,12 @@ VoidBot::UserLoggedInOrChangedName(const char *SessionID, const char *Name)
 		fLastWords[Name] = log;
 		fData.UserByID(SessionID)->Name(String(Name).ToLowerCase().Cstr());
 	}
-	
+
 	// message reporting
 	ReportMessageExistence(SessionID, Name);
 }
 //-------------------------------------------------------------------------------
-void 
+void
 VoidBot::UserLoggedOut(const char*)
 {
 	// do we care?
@@ -590,7 +590,7 @@ String VoidBot::MyTime()
 	String result(asctime(localtime(&timer)));
 	result[result.Length() - 1] = ' ';
 	result += "My Local Time";
-	
+
 	return result;
 }
 //-------------------------------------------------------------------------------
@@ -601,7 +601,7 @@ String VoidBot::Time()
 	String result(asctime(gmtime(&timer)));
 	result[result.Length() - 1] = ' ';
 	result += "GMT";
-	
+
 	return result;
 }
 //-------------------------------------------------------------------------------
@@ -609,29 +609,29 @@ String VoidBot::NetTime()
 {
 	char buff[32];	// blea =P
 	sprintf(buff, "@" INT32_FORMAT_SPEC, (int32) (((SecondsSinceJan1970() + 3600) % 86400) / 86.4));
-	 
+
 	return buff;
 }
 //-------------------------------------------------------------------------------
 time_t VoidBot::SecondsSinceJan1970()
 {
-	tm itstart;							// set up the base time of 
+	tm itstart;								// set up the base time of
 
-		itstart.tm_year=70;				// january 1, 1970, 00:00:00
-		itstart.tm_mday=1;
-		itstart.tm_mon=0;
-		itstart.tm_hour=0;
-		itstart.tm_min=0;
-		itstart.tm_sec=0;
-		itstart.tm_wday=4;				// Happens to be a thursday
-		itstart.tm_yday=0;
-		itstart.tm_isdst=0;
+	itstart.tm_year=70;						// january 1, 1970, 00:00:00
+	itstart.tm_mday=1;
+	itstart.tm_mon=0;
+	itstart.tm_hour=0;
+	itstart.tm_min=0;
+	itstart.tm_sec=0;
+	itstart.tm_wday=4;						// Happens to be a thursday
+	itstart.tm_yday=0;
+	itstart.tm_isdst=0;
 
-	time_t its = mktime(&itstart);		// convert this to time_t form
-	time_t now = time(NULL);			// get current time, in time_t
+	time_t its = mktime(&itstart);			// convert this to time_t form
+	time_t now = time(NULL);				// get current time, in time_t
 	time_t gwtime = mktime(gmtime(&now));
-	
-	return (time_t)difftime(gwtime, its);	// get difference twxt gmtime and its
+
+	return (time_t)difftime(gwtime, its);	// get difference between gmtime and its
 }
 //-------------------------------------------------------------------------------
 bool VoidBot::IsBotCommand(const String& Command)
@@ -641,7 +641,7 @@ bool VoidBot::IsBotCommand(const String& Command)
 	{
 		result = true;
 	}
-	
+
 	return result;
 }
 //-------------------------------------------------------------------------------
@@ -666,8 +666,8 @@ int VoidBot::WholeWordPos(const String& WordIn, const char* Word)
 				return -1;
 			}
 		}
-		
-		uint32 endpos = result + strlen(Word);  
+
+		uint32 endpos = result + strlen(Word);
 		if( WordIn.Length() > endpos )
 		{
 			if( ' ' == WordIn[endpos] )
@@ -678,26 +678,26 @@ int VoidBot::WholeWordPos(const String& WordIn, const char* Word)
 			{
 				// end not OK
 				return -1;
-			} 
+			}
 		}
 		else
 		{
 			// end ok.
-		}	
+		}
 	}
-	
+
 	return result;
 }
 //-------------------------------------------------------------------------------
 String VoidBot::GetNick(const String& From, int32 StartFrom)
 {
 	int32 cmdlen = From.Length();
-	
+
 	if( cmdlen <= StartFrom )
 	{
 		return "";
 	}
-	
+
 	// chew white space
 	while( StartFrom < cmdlen )
 	{
@@ -710,16 +710,16 @@ String VoidBot::GetNick(const String& From, int32 StartFrom)
 			break;
 		}
 	}
-	
+
 	char breakchar = ' ';
 	const char delimiter = '\'';
-	
+
 	if( delimiter == From[StartFrom] )
 	{
 		breakchar = delimiter;
 		++StartFrom;
 	}
-	 
+
 	String name;
 	while( StartFrom < cmdlen )
 	{
@@ -732,7 +732,7 @@ String VoidBot::GetNick(const String& From, int32 StartFrom)
 		name += From[StartFrom];
 		++StartFrom;
 	}
-	
+
 	return name.ToLowerCase();
 }
 //-------------------------------------------------------------------------------
@@ -744,17 +744,36 @@ void VoidBot::ReportMessageExistence(const char* SessionID, const char* Name)
 	  )
 	{
 		String notice("Message");
-		
+
 		if( fMessagesForName[Name].size() > 1 )
 		{
 			notice += "s";
 		}
-		
+
 		notice += " for you Sir!";
-		
+
 		SendPrivateMessage(SessionID, notice.Cstr());
 		fReportedNewMessages[Name] = true;
 	}
 }
 //-------------------------------------------------------------------------------
+int VoidBot::Setup(int ArgC, char** ArgV, ConstSocketRef & retSocket)
+{
+	char *spos = NULL;
+#if _MSC_VER >= 1400
+	strcpy(botPath, _pgmptr);
+#else
+	strcpy(botPath, ArgV[0]);
+#endif
+#ifdef _MSC_VER
+	spos = strrchr(botPath, '\\');
+#else
+	spos = strrchr(botPath, '/');
+#endif
+	if (spos)
+		*spos = 0;
+	else
+		strcpy(botPath, ".");
+	return Bot::Setup(ArgC, ArgV, retSocket);
+}
 //-------------------------------------------------------------------------------

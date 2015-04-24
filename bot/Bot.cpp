@@ -8,7 +8,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
 #include <string.h>
 #include <time.h>
 

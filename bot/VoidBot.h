@@ -12,6 +12,8 @@ class VoidBot: public BeShareBot::Bot
 		VoidBot();
 		
 	protected:
+		virtual int		Setup(int ArgC, char** ArgV, ConstSocketRef & retSocket);
+
 		virtual void	ReceivedChatMessage(const char* SessionID, const char* Message);
 		virtual void	ReceivedPrivateMessage(const char* SessionID, const char* Message);
 		virtual void	UserLoggedInOrChangedName(const char* SessionID, const char* Name);

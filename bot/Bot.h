@@ -43,11 +43,12 @@ class Bot
 		virtual const char*	OwnerName() = 0;
 
 	protected:
+		virtual int	Setup(int ArgC, char** ArgV, ConstSocketRef & retSocket);
+
 		BotData			fData;
 		String	fQuitCommand;
 
 	private:
-		int 		Setup(int ArgC, char** ArgV, ConstSocketRef & retSocket);
 		
 		void		HandleResultData(const MessageRef& Message);
 		void		HandleNameInfo(const char* SessionID, const MessageRef& Message);

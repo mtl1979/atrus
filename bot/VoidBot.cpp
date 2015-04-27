@@ -13,7 +13,7 @@
 const uint32 kChatHistoryDepth = 1000;
 const uint32 kDefaultChatHistory = 25;
 
-#define BOTPATH "."
+static char botPath[MAX_PATH];
 
 //-------------------------------------------------------------------------------
 VoidBot::VoidBot()
@@ -379,7 +379,7 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 		}
 
 		{
-			String fullname=BOTPATH;
+			String fullname(botPath);
 			fullname += "/email/";
 			fullname += name;
 			if(!SendTextfile(SessionID, fullname.Cstr(), false))
@@ -405,7 +405,7 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 		}
 
 		{
-			String fullname=BOTPATH;
+			String fullname(botPath);
 			fullname += "/faq/";
 			fullname += name;
 			return SendTextfile(SessionID, fullname.Cstr(), false);
@@ -416,7 +416,7 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 	String name(Command.Substring( Command.IndexOf(" ") + 1));
 	if ( 0 < name.Length() )
 	{
-		String fullname=BOTPATH;
+		String fullname(botPath);
 		fullname += "/commands/";
 		fullname += name.Cstr();
 		return SendTextfile(SessionID, fullname.Cstr(), false);
@@ -527,7 +527,7 @@ VoidBot::UserLoggedInOrChangedName(const char *SessionID, const char *Name)
 		if( atol(SessionID) > atol(fData.SessionID()) )
 		{
 			// Send special message for one user only. Not private, since it beeps
-			String fullname=BOTPATH;
+			String fullname(botPath);
 			fullname += "/motd/";
 			fullname += "motd";
 			SendTextfile(SessionID, fullname.Cstr(), true);
@@ -757,4 +757,23 @@ void VoidBot::ReportMessageExistence(const char* SessionID, const char* Name)
 	}
 }
 //-------------------------------------------------------------------------------
+int VoidBot::Setup(int ArgC, char** ArgV, ConstSocketRef & retSocket)
+{
+	char *spos = NULL;
+#if _MSC_VER >= 1400
+	strcpy(botPath, _pgmptr);
+#else
+	strcpy(botPath, ArgV[0]);
+#endif
+#ifdef _MSC_VER
+	spos = strrchr(botPath, '\\');
+#else
+	spos = strrchr(botPath, '/');
+#endif
+	if (spos)
+		*spos = 0;
+	else
+		strcpy(botPath, ".");
+	return Bot::Setup(ArgC, ArgV, retSocket);
+}
 //-------------------------------------------------------------------------------

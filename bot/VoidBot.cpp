@@ -1,14 +1,19 @@
 #include <time.h>
 
-#ifdef __BEOS__
-#include <be/kernel/OS.h>
-#elif WIN32
-#define popen _popen
-#endif
-
-#ifndef WIN32
-#include <limits.h>
-#define MAX_PATH PATH_MAX
+#if WIN32
+# define popen _popen
+#else
+# ifdef __BEOS__
+#  include <be/kernel/OS.h>
+# elif defined(__HAIKU__)
+#  include <OS.h>
+# endif
+# include <limits.h>
+# ifdef PATH_MAX
+#  define MAX_PATH PATH_MAX
+# else
+#  define MAX_PATH 1024
+# endif
 #endif
 
 #include "User.h"

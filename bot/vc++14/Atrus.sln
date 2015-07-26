@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40302.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Atrus", "Atrus.vcxproj", "{D9E4322D-270C-448B-B42A-904B5EC67650}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -20,12 +19,10 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D9E4322D-270C-448B-B42A-904B5EC67650}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D9E4322D-270C-448B-B42A-904B5EC67650}.Debug|Win32.Build.0 = Debug|Win32
-		{D9E4322D-270C-448B-B42A-904B5EC67650}.Debug|x64.ActiveCfg = Debug|x64
-		{D9E4322D-270C-448B-B42A-904B5EC67650}.Debug|x64.Build.0 = Debug|x64
+		{D9E4322D-270C-448B-B42A-904B5EC67650}.Debug|x64.ActiveCfg = Debug|Win32
 		{D9E4322D-270C-448B-B42A-904B5EC67650}.Release|Win32.ActiveCfg = Release|Win32
 		{D9E4322D-270C-448B-B42A-904B5EC67650}.Release|Win32.Build.0 = Release|Win32
-		{D9E4322D-270C-448B-B42A-904B5EC67650}.Release|x64.ActiveCfg = Release|x64
-		{D9E4322D-270C-448B-B42A-904B5EC67650}.Release|x64.Build.0 = Release|x64
+		{D9E4322D-270C-448B-B42A-904B5EC67650}.Release|x64.ActiveCfg = Release|Win32
 		{001C4ECC-76A2-4008-BBCC-BBF252EC93A5}.Debug|Win32.ActiveCfg = Debug|Win32
 		{001C4ECC-76A2-4008-BBCC-BBF252EC93A5}.Debug|Win32.Build.0 = Debug|Win32
 		{001C4ECC-76A2-4008-BBCC-BBF252EC93A5}.Debug|x64.ActiveCfg = Debug|x64

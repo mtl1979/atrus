@@ -200,12 +200,12 @@ bool VoidBot::PublicCommands(const char* SessionID, const String& Command)
 		FILE *fp = popen ("fortune", "r");
 		if(fp != NULL)
 		{
-			char ch;
+			int ch;
 			String cool= "\n";
 
 			while((ch = fgetc(fp))!= EOF)
 			{
-				cool += ch;
+				cool += (char)ch;
 			}
 
 			fclose(fp);

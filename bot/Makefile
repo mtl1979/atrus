@@ -1,4 +1,4 @@
-CXX = g++
+CXX ?= g++
 
 # compilation flags used under any OS or compiler (may be appended to, below)
 CXXFLAGS   += -I../muscle -I../ -DMUSCLE_SINGLE_THREAD_ONLY
